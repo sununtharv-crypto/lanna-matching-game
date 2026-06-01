@@ -86,7 +86,7 @@
         { type: "text", value: "cat", label: "ลายแมว" },
 
         { type: "img", value: "paloo", src: "paloo.jpg" },
-        { type: "text", value: "paloo", label: "ลายปะลู / หระมาน" },
+        { type: "text", value: "paloo", label: "ลายปะลู" },
 
         { type: "img", value: "peacock", src: "peacock.jpg" },
         { type: "text", value: "peacock", label: "ลายนกยูง" }
