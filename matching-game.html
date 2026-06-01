@@ -25,7 +25,7 @@
     }
 
     .game-board {
-        width: 600px;
+        width: 650px;
         margin: auto;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -35,7 +35,7 @@
     .card {
         background: #fff;
         border-radius: 12px;
-        height: 140px;
+        height: 150px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -46,6 +46,13 @@
         font-size: 18px;
         font-weight: bold;
         color: #7b1c1c;
+        padding: 5px;
+    }
+
+    .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     .card:hover {
@@ -66,16 +73,23 @@
 <body>
 
 <h1>เกมจับคู่ลายสักล้านนา</h1>
-<p class="subtitle">“เลือกการ์ดให้ตรงกัน เพื่อค้นพบอัตลักษณ์ลายสักโบราณทั้ง 4 แบบ”</p>
+<p class="subtitle">“จับคู่ภาพลายสักกับชื่อเรียกให้ถูกต้อง”</p>
 
 <div class="game-board" id="board"></div>
 
 <script>
     const items = [
-        "ลายมอม", "ลายมอม",
-        "ลายแมว", "ลายแมว",
-        "ลายปะลู", "ลายปะลู",
-        "ลายนกยูง", "ลายนกยูง"
+        { type: "img", value: "mom", src: "mom.jpg" },
+        { type: "text", value: "mom", label: "ลายมอม" },
+
+        { type: "img", value: "cat", src: "cat.jpg" },
+        { type: "text", value: "cat", label: "ลายแมว" },
+
+        { type: "img", value: "paloo", src: "paloo.jpg" },
+        { type: "text", value: "paloo", label: "ลายปะลู / หระมาน" },
+
+        { type: "img", value: "peacock", src: "peacock.jpg" },
+        { type: "text", value: "peacock", label: "ลายนกยูง" }
     ];
 
     let firstCard = null;
@@ -94,11 +108,18 @@
         const board = document.getElementById("board");
         const shuffled = shuffle([...items]);
 
-        shuffled.forEach(text => {
+        shuffled.forEach(item => {
             const card = document.createElement("div");
             card.classList.add("card", "hidden");
-            card.dataset.value = text;
-            card.innerHTML = text;
+            card.dataset.value = item.value;
+
+            if (item.type === "img") {
+                const img = document.createElement("img");
+                img.src = item.src;
+                card.appendChild(img);
+            } else {
+                card.textContent = item.label;
+            }
 
             card.addEventListener("click", () => reveal(card));
             board.appendChild(card);
@@ -125,7 +146,7 @@
                     firstCard.classList.add("hidden");
                     secondCard.classList.add("hidden");
                     reset();
-                }, 800);
+                }, 900);
             }
         }
     }
@@ -141,3 +162,4 @@
 
 </body>
 </html>
+
