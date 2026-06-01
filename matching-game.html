@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
@@ -21,7 +21,19 @@
         font-size: 18px;
         color: #6b5c55;
         font-style: italic;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
+    }
+
+    #timer, #bestTime {
+        font-size: 20px;
+        color: #7b1c1c;
+        margin-bottom: 10px;
+    }
+
+    #bestTime {
+        font-size: 16px;
+        color: #444;
+        margin-bottom: 25px;
     }
 
     .game-board {
@@ -75,6 +87,9 @@
 <h1>เกมจับคู่ลายสักล้านนา@RU..</h1>
 <p class="subtitle">“จับคู่ภาพลายสักกับชื่อเรียกให้ถูกต้อง”</p>
 
+<p id="timer">⏱ เวลา: 0 วินาที</p>
+<p id="bestTime">สถิติที่ดีที่สุด: -</p>
+
 <div class="game-board" id="board"></div>
 
 <script>
@@ -95,6 +110,30 @@
     let firstCard = null;
     let secondCard = null;
     let lock = false;
+
+    let time = 0;
+    let timerInterval = null;
+    let matchedCount = 0;
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            time++;
+            document.getElementById("timer").textContent = "⏱ เวลา: " + time + " วินาที";
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+
+        let best = localStorage.getItem("bestTime");
+        if (!best || time < best) {
+            localStorage.setItem("bestTime", time);
+            best = time;
+        }
+
+        document.getElementById("bestTime").textContent =
+            "สถิติที่ดีที่สุด: " + best + " วินาที";
+    }
 
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -124,6 +163,8 @@
             card.addEventListener("click", () => reveal(card));
             board.appendChild(card);
         });
+
+        startTimer();
     }
 
     function reveal(card) {
@@ -140,6 +181,13 @@
             if (firstCard.dataset.value === secondCard.dataset.value) {
                 firstCard.classList.add("matched");
                 secondCard.classList.add("matched");
+
+                matchedCount++;
+                if (matchedCount === items.length / 2) {
+                    stopTimer();
+                    alert("🎉 คุณจับคู่ครบแล้ว! ใช้เวลา " + time + " วินาที");
+                }
+
                 reset();
             } else {
                 setTimeout(() => {
@@ -162,4 +210,3 @@
 
 </body>
 </html>
-
